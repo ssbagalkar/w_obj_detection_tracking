@@ -17,6 +17,8 @@ def rename_files(image_dir):
         rename_index_files = 0
         rename_index_xmls = 0
         for child_folder in os.listdir(os.path.join(image_dir + "\\" + dir)):
+            if not os.path.isdir(os.path.join(image_dir, dir, child_folder)):
+                continue
 
             for img_file in os.listdir(os.path.join(image_dir, dir, child_folder)):
                 if(img_file.split(".")[1] == "xml"):
