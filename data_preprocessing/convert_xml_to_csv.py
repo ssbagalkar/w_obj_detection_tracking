@@ -11,6 +11,7 @@ def xml_to_csv(path):
     num_files_converted = 0
     if not os.path.isfile(os.path.join(path,path.split("\\")[-1]+"walmart_labels.csv")):
         for xml_file in glob.glob(path + '/*/*.xml'):
+            print("Processing xml to csv for --> {}".format(xml_file.split("\\")[-1]))
             tree = ET.parse(xml_file)
             root = tree.getroot()
             print("Current image --> {}".format(root.find('filename').text))
@@ -33,7 +34,7 @@ def xml_to_csv(path):
                         if value != 'hand' and value != 'item':
                             print("Appending for class {}".format(value))
                             val = value
-                            value = (root.find('filename').text,
+                            value = (xml_file.split("\\")[-1] + root.find('filename').text,
                                      int(root.find('size')[0].text),
                                      int(root.find('size')[1].text),
                                      val,
