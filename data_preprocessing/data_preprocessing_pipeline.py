@@ -5,7 +5,7 @@ from bulk_resize import resize_files_and_annotations
 from convert_xml_to_csv import xml_to_csv
 from train_test_split_data import split_into_train_test
 
-def preprocess_data(image_dir, split_data=True, resize=False, rename = False):
+def preprocess_data(image_dir, split_data=False, resize=False, rename = False):
 
     # optionally rename the data
     if rename:
@@ -24,9 +24,14 @@ def preprocess_data(image_dir, split_data=True, resize=False, rename = False):
 
     # optionally resize the data
     if resize:
-        for image_path in os.listdir(image_dir):
-            resize_files_and_annotations(image_dir=os.path.join(image_dir,image_path), out_dir=os.path.join(image_dir,image_path), csv_file_name="walmart.csv", scale_factor_x=0.125,
-                                     scale_factor_y=0.125)
+        for image_path in os.listdir(output_dir):
+            if os.path.isdir(os.path.join(os.path.dirname(image_dir),'train_test',image_path)):
+                if image_path == 'test':
+                    csv_file_name = 'test_labels.csv'
+                else:
+                    csv_file_name = 'train_labels.csv'
+                resize_files_and_annotations(image_dir=os.path.join(output_dir,image_path), out_dir=os.path.join(output_dir,image_path), csv_file = csv_file_name, scale_factor_x=0.125,
+                                         scale_factor_y=0.125, resize_in_place=True)
 
 image_dir = "C:\\Users\\saurabh\\Documents\\code\\raw_data\\data"
-preprocess_data(image_dir, resize = True, rename = True)
+preprocess_data(image_dir, split_data=True, resize=True, rename=True)
