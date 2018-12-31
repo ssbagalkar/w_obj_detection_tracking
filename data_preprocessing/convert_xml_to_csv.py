@@ -34,7 +34,7 @@ def xml_to_csv(path):
                         if value != 'hand' and value != 'item':
                             print("Appending for class {}".format(value))
                             val = value
-                            value = (xml_file.split("\\")[-1] + root.find('filename').text,
+                            value = (xml_file.split("\\")[-1].split(".")[0],
                                      int(root.find('size')[0].text),
                                      int(root.find('size')[1].text),
                                      val,
