@@ -16,13 +16,26 @@ def resize_files_and_annotations(image_dir=None,out_dir = None,resize_in_place=F
     num_of_images_resized=0
     print("\t")
     print("Resizing files and labels...")
+    unsucessful_test=0
+    unsucessful_train=0
     for filename in os.listdir(os.path.join(image_dir,'data')):
         print("Processing --> {}".format(filename))
         # If the images are not .png images, change the line below to match the image type.
         if filename.endswith(".png"):
             image = cv2.imread(os.path.join(image_dir,'data',filename))
+            if image is None:
+                print("{} cannot be read from {} set.Unsuccessfully in resizing :( :(".format(filename,image_dir.split("\\")[-1]))
+                if image_dir.split("\\")[-1] == "train":
+                    unsucessful_train+=1
+                    continue
+                else:
+                    unsucessful_test+=1
+                    continue
+            if image.shape == (320,240,3):
+                print("Image already resized.Skipping..")
+                continue
             print("Original Image size --> {}".format(image.shape))
-            resized = cv2.resize(image,None,fx=scale_factor_x, fy=scale_factor_y, interpolation=cv2.INTER_AREA)
+            resized = cv2.resize(image,None,fx=1/scale_factor_x, fy=1/scale_factor_y, interpolation=cv2.INTER_AREA)
             print("Resizing successful!!")
             print("Resizing will be stored to {}".format(os.path.join(image_dir,'data',filename)))
             cv2.imwrite(os.path.join(image_dir,'data',filename),resized)
@@ -34,6 +47,9 @@ def resize_files_and_annotations(image_dir=None,out_dir = None,resize_in_place=F
         else:
             print("Does not end in png")
     print("Number of images successfully resized --> {}".format(num_of_images_resized))
+    print("Number of test images failed to resize --> {}".format(unsucessful_test))
+    print("Number of train images failed to resize --> {}".format(unsucessful_train))
+
 
     if not os.path.isfile(os.path.join(image_dir,'labels',csv_file)):
         print("CSV file not present. Cannot resize annotations...")
