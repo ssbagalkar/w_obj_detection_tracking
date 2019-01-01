@@ -21,15 +21,15 @@ def rename_files(image_dir):
                 continue
 
             for img_file in os.listdir(os.path.join(image_dir, dir, child_folder)):
-                if(img_file.split(".")[1] == "xml"):
+                if(img_file.split(".")[-1] == "xml"):
                     if not img_file.startswith(dir):
-                        os.rename(os.path.join(image_dir,dir,child_folder,img_file), image_dir+"\\"+dir+"\\"+child_folder+"\\"+dir+"_"+img_file)
+                        os.rename(os.path.join(image_dir,dir,child_folder,img_file), image_dir+"\\"+dir+"\\"+child_folder+"\\"+dir+"_frame" + img_file.split("_frame")[-1])
                         rename_index_xmls+=1
                     else:
                         print("XML file already renamed")
-                elif (img_file.split(".")[1] == "png"):
+                elif (img_file.split(".")[-1] == "png"):
                     if not img_file.startswith(dir):
-                        os.rename(os.path.join(image_dir, dir, child_folder, img_file),image_dir + "\\" + dir + "\\" + child_folder + "\\" + dir + "_" + img_file)
+                        os.rename(os.path.join(image_dir, dir, child_folder, img_file),image_dir + "\\" + dir + "\\" + child_folder + "\\" + dir + "_frame" + img_file.split("_frame")[-1])
                         rename_index_files += 1
                     else:
                         print("Image file already renamed")
