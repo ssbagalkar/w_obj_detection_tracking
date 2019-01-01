@@ -24,14 +24,15 @@ def preprocess_data(image_dir, split_data=False, resize=False, rename = False):
 
     # optionally resize the data
     if resize:
+        output_dir = os.path.join(os.path.dirname(image_dir), "train_test")
         for image_path in os.listdir(output_dir):
             if os.path.isdir(os.path.join(os.path.dirname(image_dir),'train_test',image_path)):
                 if image_path == 'test':
                     csv_file_name = 'test_labels.csv'
                 else:
                     csv_file_name = 'train_labels.csv'
-                resize_files_and_annotations(image_dir=os.path.join(output_dir,image_path), out_dir=os.path.join(output_dir,image_path), csv_file = csv_file_name, scale_factor_x=0.125,
-                                         scale_factor_y=0.125, resize_in_place=True)
+                resize_files_and_annotations(image_dir=os.path.join(output_dir,image_path), out_dir=os.path.join(output_dir,image_path), csv_file = csv_file_name, scale_factor_x=8,
+                                         scale_factor_y=8, resize_in_place=True)
 
-image_dir = "C:\\Users\\saurabh\\Documents\\code\\raw_data\\data"
-preprocess_data(image_dir, split_data=True, resize=True, rename=True)
+image_dir = "E:\\raw_data\\data"
+preprocess_data(image_dir, split_data=False, resize=True, rename=False)
