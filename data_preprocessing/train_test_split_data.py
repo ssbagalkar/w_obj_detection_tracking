@@ -22,13 +22,18 @@ def generate_train_test_csv(train_filenames, test_filenames, train_test_dir ):
     # declare all paths
     original_csv_path = os.path.join(train_test_dir, 'walmart_labels.csv')
     print("Creating train folder...")
-    os.makedirs(os.path.join(train_test_dir,'train', 'data'))
-    os.makedirs(os.path.join(train_test_dir, 'train', 'labels'))
+    if not os.path.isdir(os.path.join(train_test_dir, 'train', 'data')):
+        os.makedirs(os.path.join(train_test_dir,'train', 'data'))
+    if not os.path.isdir(os.path.join(train_test_dir, 'train', 'labels')):
+        os.makedirs(os.path.join(train_test_dir, 'train', 'labels'))
     print("Creating test folder...")
-    os.makedirs(os.path.join(train_test_dir, 'test', 'data'))
-    os.makedirs(os.path.join(train_test_dir, 'test', 'labels'))
+    if not os.path.isdir(os.path.join(train_test_dir, 'test', 'data')):
+        os.makedirs(os.path.join(train_test_dir, 'test', 'data'))
+    if not os.path.isdir(os.path.join(train_test_dir, 'test', 'labels')):
+        os.makedirs(os.path.join(train_test_dir, 'test', 'labels'))
     train_csv_path = os.path.join(train_test_dir,'train','labels', 'train_labels.csv')
     test_csv_path = os.path.join(train_test_dir, 'test', 'labels', 'test_labels.csv')
+
 
     with open(original_csv_path, mode='r') as csv_file_in, open(train_csv_path, mode='w',newline='') as csv_train, open(test_csv_path, mode='w', newline='') as csv_test:
         csv_reader = csv.DictReader(csv_file_in)
@@ -76,8 +81,11 @@ def generate_train_test_data(train_filenames, test_filenames, train_test_dir, in
     print("Copying all images in training set...")
     print("Training set has {} images...".format(len(train_filenames)))
     for train_file in train_filenames:
-        train_img = train_file.split(".")[0]+".png"
+        train_img = train_file.split(".xml")[0]+".png"
         case = train_img.split("_frame")[0]
+        if os.path.isfile(os.path.join(train_test_dir,'train','data',train_img)):
+            print("Train directory already has {}. Skipping...".format(train_file))
+            continue
         print("Copying {} to train folder".format(train_img))
         shutil.copy2(os.path.join(input_dir,case,'frames',train_img),os.path.join(train_test_dir,'train','data'))
     print("All train images copied")
@@ -87,6 +95,9 @@ def generate_train_test_data(train_filenames, test_filenames, train_test_dir, in
     for test_file in test_filenames:
         test_img = test_file.split(".")[0]+".png"
         case = test_img.split("_frame")[0]
+        if os.path.isfile(os.path.join(train_test_dir,'test','data',test_img)):
+            print("Test directory already has {}. Skipping...".format(test_file))
+            continue
         print("Copying {} to test folder...".format(test_img))
         shutil.copy2(os.path.join(input_dir,case,'frames',test_img),os.path.join(train_test_dir,'test','data'))
     print("All test images copied.")
@@ -96,9 +107,9 @@ def generate_train_test_data(train_filenames, test_filenames, train_test_dir, in
 
 
 def split_into_train_test(input_dir, output_dir):
-    if os.path.isdir(output_dir):
-        print("Train and Test folders already present. Skipping.......")
-        return -1
+    # if os.path.isdir(output_dir):
+    #     print("Train and Test folders already present. Skipping.......")
+    #     return -1
 
     if not os.path.isdir(input_dir):
         print("Input directory--> {} is not valid.".format(input_dir))
@@ -106,8 +117,9 @@ def split_into_train_test(input_dir, output_dir):
 
     else:
         print("Input directory is present")
-        print("Creating output directory....")
-        os.makedirs(output_dir)
+        if not os.path.isdir(output_dir):
+            print("Creating output directory....")
+            os.makedirs(output_dir)
         print("Creating one csv by aggregating all csv's...")
 
         csv_filenames = find_csv_filenames(input_dir)
