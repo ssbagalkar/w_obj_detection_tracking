@@ -125,7 +125,7 @@ def split_into_train_test(input_dir, output_dir):
         csv_filenames = find_csv_filenames(input_dir)
         print("Creating one pandas dataframe for all the csv files...")
         df = pd.concat([pd.read_csv(csv_files) for csv_files in csv_filenames ])
-        combined_csv = df.to_csv(os.path.join(output_dir,"walmart_labels.csv"),index=False)
+        df.to_csv(os.path.join(output_dir,"walmart_labels.csv"),index=False)
         filenames = list(set(list(df['filename'].values)))
         print("Input directory has {} unique labels".format(len(filenames)))
         filenames.sort()
