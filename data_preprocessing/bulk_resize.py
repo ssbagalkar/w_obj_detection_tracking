@@ -57,12 +57,12 @@ def resize_files_and_annotations(image_dir=None,out_dir = None,resize_in_place=F
 
     df = pd.read_csv(os.path.join(image_dir,'labels',csv_file))
     print("Resizing {} csv...".format(image_dir.split("\\")[-1]))
-    df.loc[:,"width"] = df.loc[:,"width"]//8
-    df.loc[:, "height"] = df.loc[:, "height"] // 8
-    df.loc[:, "xmin"] = df.loc[:, "xmin"] // 8
-    df.loc[:, "ymin"] = df.loc[:, "ymin"] // 8
-    df.loc[:, "xmax"] = df.loc[:, "xmax"] // 8
-    df.loc[:, "ymax"] = df.loc[:, "ymax"] // 8
+    df.loc[:,"width"] = df.loc[:,"width"]//scale_factor_x
+    df.loc[:, "height"] = df.loc[:, "height"] // scale_factor_y
+    df.loc[:, "xmin"] = df.loc[:, "xmin"] // scale_factor_x
+    df.loc[:, "ymin"] = df.loc[:, "ymin"] // scale_factor_y
+    df.loc[:, "xmax"] = df.loc[:, "xmax"] // scale_factor_x
+    df.loc[:, "ymax"] = df.loc[:, "ymax"] // scale_factor_y
     df.to_csv(os.path.join(image_dir,'labels',csv_file),index=None)
 
 
