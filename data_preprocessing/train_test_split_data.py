@@ -87,7 +87,10 @@ def generate_train_test_data(train_filenames, test_filenames, train_test_dir, in
             print("Train directory already has {}. Skipping...".format(train_file))
             continue
         print("Copying {} to train folder".format(train_img))
-        shutil.copy2(os.path.join(input_dir,case,'frames',train_img),os.path.join(train_test_dir,'train','data'))
+        with open(os.path.join(input_dir,case,'frames',train_img), 'rb') as fin:
+            with open(os.path.join(train_test_dir,'train','data',train_img), 'wb') as fout:
+                shutil.copyfileobj(fin, fout, 128 * 1024)
+        # shutil.copy2(os.path.join(input_dir,case,'frames',train_img),os.path.join(train_test_dir,'train','data'))
     print("All train images copied")
     print("\t")
 
